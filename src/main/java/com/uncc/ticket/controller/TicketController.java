@@ -41,7 +41,7 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/tickets/storeTickets", method = RequestMethod.POST)
-    public String storeStoreTicket(Model model,@ModelAttribute(name = "ticket") @Valid TicketEntity ticket, BindingResult bindingResult,Principal principal) {
+    public String storeStoreTicket(Model model, @ModelAttribute(name = "ticket") @Valid TicketEntity ticket, BindingResult bindingResult,Principal principal) {
         if (bindingResult.hasErrors()) {
             return "tickets/storeTicket";
         };
@@ -52,13 +52,15 @@ public class TicketController {
 
     @RequestMapping(value = "/tickets/edit/{id}", method = RequestMethod.GET)
     public String editTicket(Model model,@PathVariable("id") Long id) {
-        // Code here
-        return "redirect:/"; //Remove this line
+        // took me 2 hours to FREAKIN realize all I was missing was this -.-!
+        model.addAttribute("ticket", this.ticketService.findById(id));
+        return "tickets/storeTicket";
     }
 
     @RequestMapping(value = "/tickets/delete/{id}", method = RequestMethod.GET)
     public String deleteTicket(@PathVariable("id") Long id) {
         // Code here
+        ticketService.deleteById(id);
         return "redirect:/";
     }
 
